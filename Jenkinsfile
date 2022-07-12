@@ -5,7 +5,7 @@ pipeline {
     dockerImage = ""
   }
 
-    agent { label 'user-service-app'}
+    agent { label 'windows'}
 
   stages {
 
