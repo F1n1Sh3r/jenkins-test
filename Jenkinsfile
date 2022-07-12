@@ -1,9 +1,15 @@
 pipeline {
-    agent windows
+    agent any
     tools{
         maven 'maven_3_8_6'
     }
     stages{
+        stage('Build Maven'){
+            steps{
+                checkout([$class: 'GitSCM', branches: [[name: '*/origin']], extensions: [], userRemoteConfigs: [[url: 'git@github.com:F1n1Sh3r/jenkins-test.git']]])
+                sh 'mvn clean install'
+            }
+        }
 
         stage('Build docker image'){
             steps{
