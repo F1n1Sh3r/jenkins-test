@@ -1,6 +1,11 @@
 pipeline {
 
-  agent { label 'windows'}
+  environment {
+    registry = "felipenascimento26/user-service:0.0.1"
+    dockerImage = "felipenascimento26/user-service:0.0.1"
+  }
+
+    agent { label 'windows'}
 
   stages {
 
