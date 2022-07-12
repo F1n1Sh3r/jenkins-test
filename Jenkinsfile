@@ -5,7 +5,7 @@ pipeline {
     dockerImage = ""
   }
 
-    agent { label 'kubepod'}
+    agent { label 'user-service-app'}
 
   stages {
 
@@ -36,7 +36,7 @@ pipeline {
     stage('Deploy App') {
       steps {
         script {
-          kubernetesDeploy(configs: "myweb.yaml", kubeconfigId: "mykubeconfigpod")
+          kubernetesDeploy(configs: "user-service.yaml", kubeconfigId: "default")
         }
       }
     }
