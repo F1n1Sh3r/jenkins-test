@@ -14,7 +14,7 @@ pipeline {
         stage('Deploy to k8s'){
             steps{
                 script{
-                    kubernetesDeploy (configs: 'deploymentservice.yaml',kubeconfigId: 'mykubeconfigsecret')
+                    kubernetesDeploy (configs: 'iuser-service.yaml',kubeconfigId: 'mykubeconfigsecret')
                 }
             }
         }
