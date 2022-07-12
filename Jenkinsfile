@@ -1,19 +1,13 @@
 pipeline {
 
   environment {
-    registry = "localhost:5000/justme/myweb"
-    dockerImage = ""
+    registry = "localhost:5000/justme/mydocker"
+    dockerImage = "felipenascimento26/user-service:0.0.1"
   }
 
     agent { label 'windows'}
 
   stages {
-
-    stage('Checkout Source') {
-      steps {
-        git 'git@github.com:F1n1Sh3r/jenkins-test.git'
-      }
-    }
 
     stage('Build image') {
       steps{
