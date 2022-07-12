@@ -8,7 +8,6 @@ pipeline {
             steps{
                 script{
                     sh 'docker build -t felipenascimento26/user-service:0.0.1'
-                    sh 'kubectl --kubeconfig="C:\Users\felip\.kube\config" cluster-info'
                 }
             }
         }
