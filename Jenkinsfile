@@ -1,11 +1,6 @@
 pipeline {
 
-  environment {
-    registry = "localhost:5000/justme/mydocker"
-    dockerImage = "felipenascimento26/user-service:0.0.1"
-  }
-
-    agent { label 'windows'}
+  agent { label 'windows'}
 
   stages {
 
