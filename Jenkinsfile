@@ -1,22 +1,43 @@
 pipeline {
-    agent any
-    tools{
-        maven '3.8.6'
-    }
-    stages{
-        stage('Build docker image'){
-            steps{
-                script{
-                    sh 'docker build -t felipenascimento26/user-service:0.0.1'
-                }
-            }
+
+  environment {
+    dockerimagename = "felipenascimento26/user-service:0.0.1"
+    dockerImage = ""
+  }
+
+  agent any
+
+  stages {
+
+    stage('Build image') {
+      steps{
+        script {
+          dockerImage = docker.build dockerimagename
         }
-        stage('Deploy to k8s'){
-            steps{
-                script{
-                    kubernetesDeploy (configs: 'user-service.yaml',kubeconfigId: 'mykubeconfigsecret')
-                }
-            }
-        }
+      }
     }
+
+    stage('Pushing Image') {
+      environment {
+               registryCredential = 'dockerhublogin'
+           }
+      steps{
+        script {
+          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+            dockerImage.push("0.0.1")
+          }
+        }
+      }
+    }
+
+    stage('Deploying App to Kubernetes') {
+      steps {
+        script {
+          kubernetesDeploy(configs: "deploymentservice.yml", kubeconfigId: "kubernetes")
+        }
+      }
+    }
+
+  }
+
 }
