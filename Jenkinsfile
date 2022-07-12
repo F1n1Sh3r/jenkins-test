@@ -6,11 +6,10 @@ pipeline {
     stages{
         stage('Build Maven'){
             steps{
-                checkout([$class: 'GitSCM', branches: [[name: '*/origin']], extensions: [], userRemoteConfigs: [[url: 'git@github.com:F1n1Sh3r/jenkins-test.git']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/F1n1Sh3r/jenkins-test.git']]])
                 sh 'mvn clean install'
             }
         }
-
         stage('Build docker image'){
             steps{
                 script{
