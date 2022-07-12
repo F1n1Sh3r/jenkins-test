@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent windows
     tools{
         maven 'maven_3_8_6'
     }
