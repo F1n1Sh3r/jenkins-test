@@ -1,2 +1,5 @@
-FROM httpd:2.4
-COPY ./index.html /usr/local/apache2/htdocs/
+FROM openjdk:11
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} user-service.jar
+ENTRYPOINT ["java","-jar","/user-service.jar"]
+EXPOSE 9002
