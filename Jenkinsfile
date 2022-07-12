@@ -1,19 +1,13 @@
 pipeline {
-    agent any
+    agent windows
     tools{
         maven 'maven_3_8_6'
     }
     stages{
-        stage('Build Maven'){
-            steps{
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/F1n1Sh3r/jenkins-test.git']]])
-                sh 'mvn clean install'
-            }
-        }
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t javatechie/devops-integration .'
+                    sh 'docker build -t felipenascimento26/user-service:0.0.1'
                 }
             }
         }
@@ -23,7 +17,7 @@ pipeline {
                    withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
                    sh 'docker login -u javatechie -p ${dockerhubpwd}'
 
-}
+        }
                    sh 'docker push javatechie/devops-integration'
                 }
             }
@@ -31,7 +25,7 @@ pipeline {
         stage('Deploy to k8s'){
             steps{
                 script{
-                    kubernetesDeploy (configs: 'deploymentservice.yaml',kubeconfigId: 'k8sconfigpwd')
+                    kubernetesDeploy (configs: 'deploymentservice.yaml',kubeconfigId: 'kubepod')
                 }
             }
         }
