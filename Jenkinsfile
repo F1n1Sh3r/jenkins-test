@@ -2,7 +2,7 @@ pipeline {
 
   environment {
     registry = "felipenascimento26/user-service:0.0.1"
-    dockerImage = "felipenascimento26/user-service:0.0.1"
+    registryCredential = 'dockerhub'
   }
 
     agent { label 'windows'}
