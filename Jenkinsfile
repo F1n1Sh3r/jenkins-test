@@ -1,40 +1,34 @@
 pipeline {
-
-  environment {
-    registry = "localhost:9002/justme/mydocker"
-    dockerImage = "felipenascimento26/user-service:0.0.1"
-  }
-
-    agent { label 'windows'}
-
-  stages {
-
-    stage('Build image') {
-      steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
-        }
-      }
+    agent any
+    tools{
+        maven 'maven_3_8_6'
     }
+    stages{
 
-    stage('Push Image') {
-      steps{
-        script {
-          docker.withRegistry( "" ) {
-            dockerImage.push()
-          }
+        stage('Build docker image'){
+            steps{
+                script{
+                    sh 'docker build -t javatechie/devops-integration .'
+                }
+            }
         }
-      }
-    }
+        stage('Push image to Hub'){
+            steps{
+                script{
+                   withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+                   sh 'docker login -u javatechie -p ${dockerhubpwd}'
 
-    stage('Deploy App') {
-      steps {
-        script {
-          kubernetesDeploy(configs: "user-service.yaml", kubeconfigId: "default")
+}
+                   sh 'docker push javatechie/devops-integration'
+                }
+            }
         }
-      }
+        stage('Deploy to k8s'){
+            steps{
+                script{
+                    kubernetesDeploy (configs: 'deploymentservice.yaml',kubeconfigId: 'k8sconfigpwd')
+                }
+            }
+        }
     }
-
-  }
-
 }
